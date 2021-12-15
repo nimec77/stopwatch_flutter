@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ElapsedTimeText extends StatelessWidget {
-  const ElapsedTimeText({Key? key, required this.elapsed}) : super(key: key);
   final Duration elapsed;
+
+  const ElapsedTimeText({required this.elapsed, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class ElapsedTimeText extends StatelessWidget {
     final hundredsStr = hundreds.toStringAsFixed(0).padLeft(2, '0');
     final secondsStr = seconds.toString().padLeft(2, '0');
     final minutesStr = minutes.toString().padLeft(2, '0');
-    const digitWidth = 24.0;
+    const digitWidth = 12.0;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -31,9 +32,10 @@ class ElapsedTimeText extends StatelessWidget {
 }
 
 class TimeDigit extends StatelessWidget {
-  const TimeDigit(this.text, {Key? key, required this.width}) : super(key: key);
   final String text;
   final double width;
+
+  const TimeDigit(this.text, {required this.width, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class TimeDigit extends StatelessWidget {
       width: width,
       child: Text(
         text,
-        style: const TextStyle(fontSize: 40),
+        style: const TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ),
     );

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
 class StartStopButton extends StatelessWidget {
-  const StartStopButton({Key? key, required this.isRunning, this.onPressed})
-      : super(key: key);
   final bool isRunning;
   final VoidCallback? onPressed;
+
+  const StartStopButton({
+    required this.isRunning,
+    Key? key,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +18,6 @@ class StartStopButton extends StatelessWidget {
         child: InkWell(
           onTap: onPressed,
           child: Align(
-            alignment: Alignment.center,
             child: Text(
               isRunning ? 'Stop' : 'Start',
             ),

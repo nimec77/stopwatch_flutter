@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ElapsedTimeTextBasic extends StatelessWidget {
-  const ElapsedTimeTextBasic({Key? key, required this.elapsed})
-      : super(key: key);
   final Duration elapsed;
+
+  const ElapsedTimeTextBasic({required this.elapsed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
