@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:stopwatch_flutter/ui/reset_button.dart';
 import 'package:stopwatch_flutter/ui/start_stop_button.dart';
 import 'package:stopwatch_flutter/ui/stopwatch_renderer.dart';
+import 'package:stopwatch_flutter/ui/stopwatch_ticker_ui.dart';
 
 class Stopwatch extends StatefulWidget {
   const Stopwatch({Key? key}) : super(key: key);
@@ -12,28 +12,8 @@ class Stopwatch extends StatefulWidget {
 }
 
 class _StopwatchState extends State<Stopwatch> with SingleTickerProviderStateMixin {
-  late final Ticker _ticker;
-  var _previouslyElapsed = Duration.zero;
-  var _currentlyElapsed = Duration.zero;
+  final _tickerUIKey = GlobalKey<StopwatchTickerUIState>();
   var _isRunning = false;
-
-  Duration get _elapsed => _previouslyElapsed + _currentlyElapsed;
-
-  @override
-  void initState() {
-    _ticker = createTicker((elapsed) {
-      setState(() {
-        _currentlyElapsed = elapsed;
-      });
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _ticker.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +23,11 @@ class _StopwatchState extends State<Stopwatch> with SingleTickerProviderStateMix
 
         return Stack(
           children: [
-            StopwatchRenderer(elapsed: _elapsed, radius: radius),
+            StopwatchRenderer(radius: radius),
+            StopwatchTickerUI(
+              key: _tickerUIKey,
+              radius: radius,
+            ),
             Align(
               alignment: Alignment.bottomLeft,
               child: SizedBox(
@@ -74,22 +58,14 @@ class _StopwatchState extends State<Stopwatch> with SingleTickerProviderStateMix
   void _toggleRunning() {
     setState(() {
       _isRunning = !_isRunning;
-      if (_isRunning) {
-        _ticker.start();
-      } else {
-        _ticker.stop();
-        _previouslyElapsed += _currentlyElapsed;
-        _currentlyElapsed = Duration.zero;
-      }
     });
+    _tickerUIKey.currentState?.toggleRunning(isRunning: _isRunning);
   }
 
   void _reset() {
-    _ticker.stop();
     setState(() {
       _isRunning = false;
-      _previouslyElapsed = Duration.zero;
-      _currentlyElapsed = Duration.zero;
     });
+    _tickerUIKey.currentState?.reset();
   }
 }
